@@ -1,0 +1,60 @@
+{
+  "name": "vocabulary-windows",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A personal vocabulary notebook for Windows",
+  "main": "apps/desktop/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k -n API,WEB,DESKTOP -c green,cyan,magenta \"npm:dev:api\" \"npm:dev:web\" \"npm:dev:desktop\"",
+    "dev:api": ".venv\\Scripts\\python.exe -m uvicorn main:app --app-dir apps/api --reload --port 8000",
+    "dev:web": "vite --config apps/web/vite.config.ts",
+    "dev:desktop": "wait-on --verbose --timeout 60000 tcp:5173 http-get://127.0.0.1:8000/health && electron .",
+    "build:web": "vite build --config apps/web/vite.config.ts",
+    "build:api": ".venv\\Scripts\\python.exe -m PyInstaller --noconfirm --clean --onefile --collect-all uiautomation --name vocabulary-api --distpath apps/api/dist --workpath apps/api/build --specpath apps/api apps/api/main.py",
+    "build:win": "npm run build:web && npm run build:api && electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.local.vocabulary",
+    "productName": "My Vocabulary",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "apps/desktop/**/*",
+      "apps/web/dist/**/*",
+      "node_modules/ecdict/**/*",
+      "node_modules/csv-parse/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "apps/api/dist/vocabulary-api.exe",
+        "to": "api/vocabulary-api.exe"
+      }
+    ],
+    "win": {
+      "icon": "apps/desktop/assets/app-icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "installerIcon": "apps/desktop/assets/app-icon.ico",
+      "uninstallerIcon": "apps/desktop/assets/app-icon.ico"
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "concurrently": "^9.2.0",
+    "electron": "^36.5.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.4",
+    "wait-on": "^8.0.3"
+  },
+  "dependencies": {
+    "ecdict": "^0.0.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
