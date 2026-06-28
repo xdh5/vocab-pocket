@@ -5,17 +5,25 @@
   "description": "A personal vocabulary notebook for Windows",
   "main": "apps/desktop/main.cjs",
   "scripts": {
+    "predev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/prepare-dev.ps1",
     "dev": "concurrently -k -n API,WEB,DESKTOP -c green,cyan,magenta \"npm:dev:api\" \"npm:dev:web\" \"npm:dev:desktop\"",
-    "dev:api": ".venv\\Scripts\\python.exe -m uvicorn main:app --app-dir apps/api --reload --port 8000",
+    "dev:api": ".venv\\Scripts\\python.exe -m uvicorn main:app --app-dir apps/api --host 0.0.0.0 --port 8000",
     "dev:web": "vite --config apps/web/vite.config.ts",
     "dev:desktop": "wait-on --verbose --timeout 60000 tcp:5173 http-get://127.0.0.1:8000/health && electron .",
+    "db:migrate": ".venv\\Scripts\\python.exe -m alembic -c apps\\api\\alembic.ini upgrade head",
+    "typecheck": "tsc --noEmit -p apps/web/tsconfig.json",
+    "lint": "npm run lint:web && npm run lint:api",
+    "lint:web": "biome check apps/web/src apps/desktop",
+    "lint:api": ".venv\\Scripts\\ruff.exe check apps/api",
+    "format": "biome format --write apps/web/src apps/desktop && .venv\\Scripts\\ruff.exe format apps/api",
+    "check": "npm run lint && npm run typecheck && npm run build:web",
     "build:web": "vite build --config apps/web/vite.config.ts",
-    "build:api": ".venv\\Scripts\\python.exe -m PyInstaller --noconfirm --clean --onefile --collect-all uiautomation --name vocabulary-api --distpath apps/api/dist --workpath apps/api/build --specpath apps/api apps/api/main.py",
+    "build:api": ".venv\\Scripts\\python.exe -m PyInstaller --noconfirm --clean --onefile --collect-all alembic --collect-all uiautomation --exclude-module alembic.testing --exclude-module pytest --add-data \"apps/api/alembic;alembic\" --add-data \"apps/api/alembic.ini;.\" --name vocabulary-api --distpath apps/api/dist --workpath apps/api/build apps/api/main.py",
     "build:win": "npm run build:web && npm run build:api && electron-builder --win nsis"
   },
   "build": {
-    "appId": "com.local.vocabulary",
-    "productName": "My Vocabulary",
+    "appId": "com.vocaboom.desktop",
+    "productName": "Vocaboom",
     "directories": {
       "output": "release"
     },
@@ -42,6 +50,7 @@
     }
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",

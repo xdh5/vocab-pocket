@@ -1,22 +1,135 @@
-* { box-sizing: border-box; }
-html, body, #hover-root { height: 100%; margin: 0; }
-body { background: #fffdf7; color: #19342d; font-family: Inter, "Microsoft YaHei", system-ui, sans-serif; padding: 5px; }
-.hover-card { background: #fffdf7; border: 1px solid #d9d2c2; border-radius: 10px; box-shadow: 0 8px 22px rgba(20,39,33,.2); display: flex; flex-direction: column; height: 100%; padding: 9px 11px 8px; position: relative; }
-.word-info { display: flex; flex: 1; flex-direction: column; min-height: 0; min-width: 0; }
-.word-line { align-items: baseline; display: flex; flex-wrap: wrap; gap: 6px; padding-right: 16px; }
-.word-line strong { font-family: Georgia, serif; font-size: 18px; overflow-wrap: anywhere; }
-.phonetic { color: #89918d; font-family: Georgia, serif; font-size: 11px; }
-.count-line { color: #a07961; font-size: 9px; margin-top: 2px; }
-.speak-button { background: transparent; border: 0; border-radius: 5px; cursor: pointer; font-size: 13px; line-height: 1; padding: 3px; }
-.speak-button:hover { background: #e8eee8; }
-.meaning-list { display: grid; gap: 3px; margin-top: 5px; overflow-y: auto; padding-right: 3px; }
-.meaning-list > div { align-items: flex-start; display: flex; font-size: 11px; gap: 5px; line-height: 1.35; }
-.meaning-list b { color: #b36a3c; flex: 0 0 auto; font-size: 10px; margin-top: 1px; }
-.meaning-list span { overflow-wrap: anywhere; white-space: normal; }
-.no-meaning { color: #9a9f9c; }
-.hover-footer { align-items: center; display: flex; justify-content: flex-end; min-height: 27px; padding-top: 5px; }
-.hover-actions { display: flex; gap: 7px; }
-.hover-actions button { background: #1f4a3f; border: 0; border-radius: 6px; color: white; cursor: pointer; font-size: 9px; font-weight: 700; padding: 6px 8px; }
-.hover-actions button.speaking { background: #b36a3c; }
-.hover-status { color: #517166; font-size: 11px; font-weight: 700; }
-.hover-close { background: transparent; border: 0; color: #9a9f9c; cursor: pointer; font-size: 18px; padding: 1px 4px; position: absolute; right: 5px; top: 3px; }
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#hover-root {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: #fffdf7;
+  color: #0b3158;
+  font-family: Inter, "Microsoft YaHei", system-ui, sans-serif;
+  padding: 5px;
+}
+.hover-card {
+  background: #fffdf7;
+  border: 1px solid #e0b83e;
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(11, 49, 88, 0.22);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 9px 11px 8px;
+  position: relative;
+}
+.word-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.word-line {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-right: 16px;
+}
+.word-line strong {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+.phonetic {
+  color: #716b62;
+  font-family: Georgia, serif;
+  font-size: 11px;
+}
+.count-line {
+  color: #9c6b3c;
+  font-size: 9px;
+  margin-top: 2px;
+}
+.speak-button {
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 3px;
+}
+.speak-button:hover {
+  background: #dcecf8;
+}
+.meaning-list {
+  display: grid;
+  gap: 3px;
+  margin-top: 5px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+.meaning-list > div {
+  align-items: flex-start;
+  display: flex;
+  font-size: 11px;
+  gap: 5px;
+  line-height: 1.35;
+}
+.meaning-list b {
+  color: #d88700;
+  flex: 0 0 auto;
+  font-size: 10px;
+  margin-top: 1px;
+}
+.meaning-list span {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.no-meaning {
+  color: #85786e;
+}
+.hover-footer {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 27px;
+  padding-top: 5px;
+}
+.hover-actions {
+  display: flex;
+  gap: 7px;
+}
+.hover-actions button {
+  background: #0b3158;
+  border: 0;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 6px 8px;
+}
+.hover-actions button.speaking {
+  background: #f2a900;
+  color: #3f2a17;
+}
+.hover-status {
+  color: #0b3158;
+  font-size: 11px;
+  font-weight: 700;
+}
+.hover-close {
+  background: transparent;
+  border: 0;
+  color: #85786e;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 1px 4px;
+  position: absolute;
+  right: 5px;
+  top: 3px;
+}

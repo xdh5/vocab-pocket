@@ -4,9 +4,10 @@ import path from "node:path";
 
 export default defineConfig({
   root: path.resolve(__dirname),
+  publicDir: path.resolve(__dirname, "../desktop/assets"),
   plugins: [react()],
   base: "./",
-  server: { port: 5173, strictPort: true },
+  server: { host: "0.0.0.0", port: 5173, strictPort: true },
   build: {
     outDir: "dist",
     emptyOutDir: true,

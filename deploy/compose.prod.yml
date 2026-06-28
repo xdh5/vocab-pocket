@@ -1,0 +1,46 @@
+name: vocaboom
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    env_file:
+      - .env
+    environment:
+      VOCABULARY_DATA_DIR: /data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+    volumes:
+      - vocaboom_data:/data
+
+  web:
+    image: caddy:2-alpine
+    depends_on:
+      api:
+        condition: service_healthy
+        restart: true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../apps/web/dist:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  vocaboom_data:
+  caddy_data:
+  caddy_config:

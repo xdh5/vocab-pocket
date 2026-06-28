@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+node_modules
+release
+data
+apps/api/.env
+apps/api/build
+apps/api/dist
+apps/web/dist
+*.log
+__pycache__
+*.pyc

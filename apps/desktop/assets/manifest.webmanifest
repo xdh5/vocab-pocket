@@ -1,0 +1,18 @@
+{
+  "name": "Vocaboom 背单词",
+  "short_name": "Vocaboom",
+  "description": "在手机上复习电脑端收集的英语单词",
+  "start_url": "/mobile",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff9e9",
+  "theme_color": "#0b3158",
+  "icons": [
+    {
+      "src": "/app-icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+"""Vocaboom API package."""

@@ -2,6 +2,7 @@ node_modules/
 dist/
 apps/api/build/
 apps/api/*.spec
+vocabulary-api.spec
 release/
 *.log
 __pycache__/
@@ -9,3 +10,4 @@ __pycache__/
 .venv/
 data/*.db
 .env
+deploy/.env

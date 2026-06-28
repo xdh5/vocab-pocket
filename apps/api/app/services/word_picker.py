@@ -2,7 +2,6 @@ import re
 
 import uiautomation as automation
 
-
 WORD_PATTERN = re.compile(r"[A-Za-z]+(?:['’-][A-Za-z]+)*")
 
 
@@ -15,7 +14,6 @@ def _clean_word(text: str) -> str | None:
 
 
 def word_at_point(x: int, y: int) -> str | None:
-    """Best-effort word lookup using the Windows accessibility text pattern."""
     try:
         with automation.UIAutomationInitializerInThread():
             control = automation.ControlFromPoint(x, y)
@@ -33,8 +31,6 @@ def word_at_point(x: int, y: int) -> str | None:
                                 return word
                 except Exception:
                     pass
-
-                # Some controls expose each link or label as a single accessible name.
                 word = _clean_word(control.Name)
                 if word:
                     return word
@@ -42,4 +38,3 @@ def word_at_point(x: int, y: int) -> str | None:
     except Exception:
         return None
     return None
-

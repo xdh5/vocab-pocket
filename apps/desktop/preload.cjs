@@ -8,8 +8,14 @@ contextBridge.exposeInMainWorld("desktop", {
     ipcRenderer.on("words:changed", listener);
     return () => ipcRenderer.removeListener("words:changed", listener);
   },
+  auth: {
+    setToken: (token) => ipcRenderer.invoke("auth:set-token", token),
+  },
   hover: {
-    addWord: (word, category) => ipcRenderer.invoke("hover:add-word", word, category),
-    dismiss: () => ipcRenderer.send("hover:dismiss")
-  }
+    addWord: (word, mode, wordInfo) => ipcRenderer.invoke("hover:add-word", word, mode, wordInfo),
+    dismiss: () => ipcRenderer.send("hover:dismiss"),
+  },
+  dictionary: {
+    lookup: (word) => ipcRenderer.invoke("dictionary:lookup", word),
+  },
 });
