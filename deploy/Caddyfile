@@ -3,7 +3,7 @@ vocaboom.cyberlab.bond {
 
 	@backend path /api/* /media/* /health
 	handle @backend {
-		reverse_proxy api:8000
+		reverse_proxy 172.17.0.1:18000
 	}
 
 	@versioned path /assets/*
@@ -13,7 +13,7 @@ vocaboom.cyberlab.bond {
 	header @pwa Cache-Control "no-cache"
 
 	handle {
-		root * /srv
+		root * /srv/vocaboom
 		try_files {path} /index.html
 		file_server
 	}

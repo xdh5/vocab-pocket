@@ -9,6 +9,8 @@ services:
       - .env
     environment:
       VOCABULARY_DATA_DIR: /data
+    ports:
+      - "172.17.0.1:18000:8000"
     healthcheck:
       test:
         - CMD
@@ -23,24 +25,5 @@ services:
     volumes:
       - vocaboom_data:/data
 
-  web:
-    image: caddy:2-alpine
-    depends_on:
-      api:
-        condition: service_healthy
-        restart: true
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    restart: unless-stopped
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ../apps/web/dist:/srv:ro
-      - caddy_data:/data
-      - caddy_config:/config
-
 volumes:
   vocaboom_data:
-  caddy_data:
-  caddy_config:

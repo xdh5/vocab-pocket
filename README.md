@@ -112,10 +112,10 @@ VOCABULARY_DOUBAO_IMAGE_MODEL=doubao-seedream-5-0-260128
 
 生产地址为 `https://vocaboom.cyberlab.bond`。部署使用一台阿里云 ECS：
 
-- Caddy 提供 HTTPS、静态网页与 `/api`、`/media` 反向代理。
+- 复用 ECS 上已有的 Caddy 网关，提供 HTTPS、静态网页与 `/api`、`/media` 反向代理。
 - FastAPI 运行在独立容器中，不直接暴露公网端口。
 - SQLite 数据库和词义图片保存在 Docker 持久化卷 `vocaboom_data`。
-- Caddy 的证书与配置保存在独立持久化卷，重启和重新部署不会丢失。
+- 部署脚本会备份、验证并热加载 Caddy 配置；配置无效时自动恢复，不影响现有站点。
 
 服务器需要安装 Docker Engine 和 Docker Compose 插件，并在安全组中开放 `80/TCP`、`443/TCP` 和 `443/UDP`。SSH 端口只应对可信 IP 开放。云解析 DNS 为 `cyberlab.bond` 添加记录：
 
