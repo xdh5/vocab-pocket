@@ -25,10 +25,12 @@ awk '
   cat deploy/Caddyfile
   printf '# END VOCABOOM\n'
 } >> "${CADDY_CONFIG}.tmp"
-mv "${CADDY_CONFIG}.tmp" "$CADDY_CONFIG"
+cat "${CADDY_CONFIG}.tmp" > "$CADDY_CONFIG"
+rm -f "${CADDY_CONFIG}.tmp"
 
 if ! docker exec "$CADDY_CONTAINER" caddy validate --config /etc/caddy/Caddyfile; then
-  mv "$CADDY_BACKUP" "$CADDY_CONFIG"
+  cat "$CADDY_BACKUP" > "$CADDY_CONFIG"
+  rm -f "$CADDY_BACKUP"
   exit 1
 fi
 
