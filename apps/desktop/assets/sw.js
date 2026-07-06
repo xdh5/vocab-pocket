@@ -1,5 +1,5 @@
-const CACHE_NAME = "vocaboom-shell-v1";
-const APP_SHELL = ["/mobile", "/manifest.webmanifest", "/app-icon.png"];
+const CACHE_NAME = "vocaboom-shell-v2";
+const APP_SHELL = ["/", "/manifest.webmanifest", "/app-icon.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));

@@ -19,7 +19,7 @@ Electron only owns operating-system capabilities. React owns presentation and in
 
 DeepSeek is called only by FastAPI. The API key stays in backend configuration, and validated structured word cards are persisted in SQLite before being returned to React.
 
-The React entry selects the PC word bank for `/` and the mobile review PWA for `/mobile`. Both surfaces share the same FastAPI word resource. Mobile review actions advance an eight-stage spaced-repetition schedule in SQLite; re-adding or forgetting a word resets its mastery stage. HTTPS deployments use same-origin API requests, while local-network development targets port 8000 on the PC host.
+The React entry uses one root route and selects the PC word bank or mobile review PWA from the viewport, while Electron always uses the PC surface. Both surfaces share the same FastAPI word resource. Mobile review actions advance an eight-stage spaced-repetition schedule in SQLite; re-adding or forgetting a word resets its mastery stage. HTTPS deployments use same-origin API requests, while local-network development targets port 8000 on the PC host.
 
 The Electron dictionary resolves an encountered inflection to its ECDICT lemma before it reaches FastAPI. FastAPI stores the encounter immediately, returns the pending word card, and runs Doubao enrichment and optional image retrieval in a background task using the canonical headword only. The PC client polls pending cards until enrichment completes.
 

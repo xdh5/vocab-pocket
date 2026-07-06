@@ -9,9 +9,9 @@ import { WordBookPage } from "./pages/WordBookPage";
 
 export default function App() {
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
-  const isMobileExperience =
-    window.location.pathname.startsWith("/mobile") ||
-    (typeof window.desktop === "undefined" && window.matchMedia("(max-width: 700px)").matches);
+  const [isMobileExperience, setIsMobileExperience] = useState(
+    () => typeof window.desktop === "undefined" && window.matchMedia("(max-width: 700px)").matches,
+  );
 
   useEffect(() => {
     const requireLogin = () => setUser(null);
@@ -23,6 +23,14 @@ export default function App() {
         .then(setUser)
         .catch(() => setUser(null));
     return () => window.removeEventListener("vocaboom:auth-required", requireLogin);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window.desktop !== "undefined") return;
+    const query = window.matchMedia("(max-width: 700px)");
+    const updateLayout = () => setIsMobileExperience(query.matches);
+    query.addEventListener("change", updateLayout);
+    return () => query.removeEventListener("change", updateLayout);
   }, []);
 
   if (user === undefined) return <main className="app-loading">正在打开词库…</main>;
