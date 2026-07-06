@@ -9,6 +9,9 @@ import { WordBookPage } from "./pages/WordBookPage";
 
 export default function App() {
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
+  const isMobileExperience =
+    window.location.pathname.startsWith("/mobile") ||
+    (typeof window.desktop === "undefined" && window.matchMedia("(max-width: 700px)").matches);
 
   useEffect(() => {
     const requireLogin = () => setUser(null);
@@ -34,7 +37,7 @@ export default function App() {
     setUser(await authApi.updateStudySettings(reviewTarget, newTarget));
   }
 
-  return window.location.pathname.startsWith("/mobile") ? (
+  return isMobileExperience ? (
     <MobileReviewPage
       username={user.username}
       dailyReviewTarget={user.daily_review_target}
