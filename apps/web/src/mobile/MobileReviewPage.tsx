@@ -9,7 +9,7 @@ import { useReviewQueue } from "./useReviewQueue";
 
 type ReviewFilter = "all" | LearningMode;
 type MobileScreen = "home" | "review" | "library" | "settings" | "reward";
-type LibraryFilter = "learning" | "mastered" | "all";
+type LibraryFilter = "learning" | "mastered" | "all" | "ranking";
 
 type DailyProgress = { date: string; completed: number; known: number; target: number };
 type StudySettings = { reviewTarget: number; newTarget: number };
@@ -78,6 +78,10 @@ export function MobileReviewPage({
     [readyWords],
   );
   const masteredWords = useMemo(() => words.filter((word) => word.is_mastered), [words]);
+  const rankedWords = useMemo(
+    () => [...words].filter((word) => word.add_count > 1).sort((a, b) => b.add_count - a.add_count),
+    [words],
+  );
   useEffect(() => {
     document.body.classList.add("mobile-body");
     return () => document.body.classList.remove("mobile-body");
@@ -264,11 +268,12 @@ export function MobileReviewPage({
           </div>
           <strong>{words.length} 词</strong>
         </header>
-        <nav className="review-filters">
+        <nav className="review-filters library-filters">
           {[
             ["learning", "学习中"],
             ["mastered", "已掌握"],
             ["all", "全部"],
+            ["ranking", "重复榜"],
           ].map(([value, label]) => (
             <button
               type="button"
@@ -280,26 +285,46 @@ export function MobileReviewPage({
             </button>
           ))}
         </nav>
-        <section className="mobile-word-list">
-          {visibleWords.map((word) => (
-            <article key={word.id}>
-              <div>
-                <strong>{word.term}</strong>
-                <span>
-                  {word.review_count === 0
-                    ? "未开始"
-                    : word.is_mastered
-                      ? "已掌握"
-                      : `掌握 ${word.mastery_level}/8`}
-                </span>
-              </div>
-              <small>
-                累计加入 {word.add_count} 次 · 复习 {word.review_count} 次
-              </small>
-            </article>
-          ))}
-          {!visibleWords.length && <p className="mobile-message">这里暂时没有单词。</p>}
-        </section>
+        {libraryFilter === "ranking" ? (
+          <section className="mobile-ranking-list">
+            <div className="ranking-heading">
+              <h2>重复遇见榜</h2>
+              <span>重复遇见，说明它值得优先记住</span>
+            </div>
+            {rankedWords.map((word, index) => (
+              <article key={word.id}>
+                <b>{index + 1}</b>
+                <div>
+                  <strong>{word.term}</strong>
+                  <small>复习 {word.review_count} 次</small>
+                </div>
+                <span>{word.add_count} 次</span>
+              </article>
+            ))}
+            {!rankedWords.length && <p className="mobile-message">还没有重复加入的单词。</p>}
+          </section>
+        ) : (
+          <section className="mobile-word-list">
+            {visibleWords.map((word) => (
+              <article key={word.id}>
+                <div>
+                  <strong>{word.term}</strong>
+                  <span>
+                    {word.review_count === 0
+                      ? "未开始"
+                      : word.is_mastered
+                        ? "已掌握"
+                        : `掌握 ${word.mastery_level}/8`}
+                  </span>
+                </div>
+                <small>
+                  累计加入 {word.add_count} 次 · 复习 {word.review_count} 次
+                </small>
+              </article>
+            ))}
+            {!visibleWords.length && <p className="mobile-message">这里暂时没有单词。</p>}
+          </section>
+        )}
         <nav className="mobile-bottom-nav">
           <button type="button" onClick={() => setScreen("home")}>
             首页
@@ -367,6 +392,12 @@ export function MobileReviewPage({
               ))}
             </select>
           </label>
+        </section>
+        <section className="memory-strategy-card">
+          <span>记忆策略</span>
+          <h2>8 阶段间隔复习</h2>
+          <p>5 分钟 · 30 分钟 · 12 小时 · 1 天 · 2 天 · 4 天 · 7 天 · 15 天</p>
+          <small>达到 8 级后每 30 天维护复习；答错或重新加入会从 0 开始。</small>
         </section>
         <section className="account-settings">
           <span>当前账号</span>
