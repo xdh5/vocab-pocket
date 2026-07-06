@@ -975,6 +975,16 @@
   border-color: #eef5ff;
 }
 
+.score.medium,
+.score.poor {
+  background: #eaf2ff;
+  color: #1d4ed8;
+}
+
+.again-button {
+  color: #1d4ed8;
+}
+
 @media (min-width: 700px) {
   .mobile-app {
     padding-top: 40px;

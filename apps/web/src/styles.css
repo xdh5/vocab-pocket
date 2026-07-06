@@ -679,3 +679,156 @@ form button:disabled {
     max-height: 90vh;
   }
 }
+
+/* Unified blue and white theme */
+body {
+  background:
+    radial-gradient(circle at 84% 0%, #dbeafe 0, transparent 30%),
+    radial-gradient(circle at 8% 100%, #eaf2ff 0, transparent 28%), #f5f9ff;
+  color: #102a56;
+}
+
+.app-loading {
+  color: #64748b;
+}
+
+.login-card,
+.add-card,
+.word-row,
+.word-detail,
+.forms-section,
+.encountered-forms > span {
+  background: #fff;
+  border-color: #d9e6f5;
+}
+
+.login-card,
+.add-card,
+.word-row {
+  box-shadow: 0 16px 44px rgba(30, 64, 175, 0.09);
+}
+
+.login-mark,
+.login-card form button,
+form button,
+.mastery-track i.filled {
+  background: #2563eb;
+  color: #fff;
+}
+
+.login-card > p,
+.eyebrow,
+.encounter-count,
+.row-arrow,
+.card-section h4,
+.meaning-rows b,
+.empty span {
+  color: #2563eb;
+}
+
+.login-card > span,
+.login-card label,
+.header-account > span,
+.header-account > button,
+.subtitle,
+.count span,
+.section-title span,
+.pronunciation,
+.word-meta,
+.mastery-summary small,
+.word-image figcaption,
+.encountered-forms small,
+.encountered-forms em,
+.common-form-line,
+.collocations small,
+.example-section small,
+.word-note,
+.empty,
+.empty p {
+  color: #64748b;
+}
+
+.login-card input,
+input,
+select {
+  background: #fff;
+  border-color: #cbdcf1;
+  color: #102a56;
+}
+
+input:focus,
+.login-card input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.count {
+  border-left-color: #60a5fa;
+}
+
+.word-row {
+  border-bottom-color: #d9e6f5;
+  color: #102a56;
+}
+
+.word-row:hover,
+.forms-section,
+.example-section,
+.tag,
+.mastery-badge,
+.collocations article,
+.enrichment-state {
+  background: #eff6ff;
+}
+
+.mastery-badge,
+.mastery-badge.mastered,
+.form-count,
+.tag,
+.tag.reading,
+.tag.listening_speaking,
+.collocations strong,
+.collocations article,
+.enrichment-state {
+  color: #1d4ed8;
+}
+
+.dialog-backdrop {
+  background: rgba(15, 42, 86, 0.48);
+}
+
+.word-detail {
+  box-shadow: 0 24px 80px rgba(15, 42, 86, 0.22);
+}
+
+.frequency.essential {
+  background: #2563eb;
+  color: #fff;
+}
+
+.frequency.common {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.frequency.recognition {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.frequency.discarded {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.mastery-track,
+.mastery-track i,
+.word-image {
+  background: #edf3fa;
+  border-color: #d9e6f5;
+}
+
+.word-detail-footer,
+.word-card-content {
+  border-color: #d9e6f5;
+}

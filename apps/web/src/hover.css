@@ -133,3 +133,42 @@ body {
   right: 5px;
   top: 3px;
 }
+
+/* Unified blue and white theme */
+body,
+.hover-card {
+  background: #fff;
+  color: #102a56;
+}
+
+.hover-card {
+  border-color: #93c5fd;
+  box-shadow: 0 8px 22px rgba(30, 64, 175, 0.2);
+}
+
+.phonetic,
+.no-meaning,
+.hover-close {
+  color: #64748b;
+}
+
+.count-line,
+.meaning-list b,
+.hover-status {
+  color: #2563eb;
+}
+
+.speak-button {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.hover-actions button,
+.hover-actions button.speaking {
+  background: #2563eb;
+  color: #fff;
+}
+
+.hover-actions button.speaking {
+  background: #60a5fa;
+}
