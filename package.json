@@ -2,7 +2,7 @@
   "name": "vocabulary-windows",
   "version": "0.1.0",
   "private": true,
-  "description": "A personal vocabulary notebook for Windows",
+  "description": "A personal vocabulary notebook for Windows and mobile",
   "main": "apps/desktop/main.cjs",
   "scripts": {
     "predev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/prepare-dev.ps1",
@@ -18,8 +18,7 @@
     "format": "biome format --write apps/web/src apps/desktop && .venv\\Scripts\\ruff.exe format apps/api",
     "check": "npm run lint && npm run typecheck && npm run build:web",
     "build:web": "vite build --config apps/web/vite.config.ts",
-    "build:api": ".venv\\Scripts\\python.exe -m PyInstaller --noconfirm --clean --onefile --collect-all alembic --collect-all uiautomation --exclude-module alembic.testing --exclude-module pytest --add-data \"apps/api/alembic;alembic\" --add-data \"apps/api/alembic.ini;.\" --name vocabulary-api --distpath apps/api/dist --workpath apps/api/build apps/api/main.py",
-    "build:win": "npm run build:web && npm run build:api && electron-builder --win nsis"
+    "build:win": "npm run build:web && electron-builder --win nsis"
   },
   "build": {
     "appId": "com.vocaboom.desktop",
@@ -32,13 +31,11 @@
       "apps/web/dist/**/*",
       "node_modules/ecdict/**/*",
       "node_modules/csv-parse/**/*",
+      "node_modules/electron-updater/**/*",
+      "node_modules/builder-util-runtime/**/*",
+      "node_modules/lazy-val/**/*",
+      "node_modules/semver/**/*",
       "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "apps/api/dist/vocabulary-api.exe",
-        "to": "api/vocabulary-api.exe"
-      }
     ],
     "win": {
       "icon": "apps/desktop/assets/app-icon.ico",
@@ -47,6 +44,10 @@
     "nsis": {
       "installerIcon": "apps/desktop/assets/app-icon.ico",
       "uninstallerIcon": "apps/desktop/assets/app-icon.ico"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://vocaboom.cyberlab.bond/desktop-updates/"
     }
   },
   "devDependencies": {
@@ -63,6 +64,7 @@
   },
   "dependencies": {
     "ecdict": "^0.0.4",
+    "electron-updater": "^6.8.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   }

@@ -1,4 +1,5 @@
-const { app, ipcMain, Menu, nativeImage, Tray } = require("electron");
+const { app, dialog, ipcMain, Menu, nativeImage, Tray } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const path = require("node:path");
 
 const { DictionaryService } = require("./src/dictionary.cjs");
@@ -8,6 +9,11 @@ const { SettingsStore } = require("./src/settings-store.cjs");
 const { WindowManager } = require("./src/window-manager.cjs");
 
 const isDevelopment = !app.isPackaged;
+const productionUrl = process.env.VOCABOOM_WEB_URL || "https://vocaboom.cyberlab.bond";
+const apiBaseUrl = isDevelopment
+  ? process.env.VOCABOOM_API_URL || "http://127.0.0.1:8000"
+  : process.env.VOCABOOM_API_URL || productionUrl;
+
 let isQuitting = false;
 let tray = null;
 let localApi = null;
@@ -30,6 +36,12 @@ function updateTrayMenu() {
       { type: "separator" },
       { label: "打开单词本", click: () => windowManager.showMainWindow() },
       {
+        label: "检查更新",
+        enabled: !isDevelopment,
+        click: () => autoUpdater.checkForUpdatesAndNotify(),
+      },
+      { type: "separator" },
+      {
         label: "退出",
         click: () => {
           isQuitting = true;
@@ -48,6 +60,30 @@ function createTray() {
   tray.on("click", () => windowManager.showMainWindow());
   tray.on("double-click", () => windowManager.showMainWindow());
   updateTrayMenu();
+}
+
+function registerAutoUpdater() {
+  if (isDevelopment) return;
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.on("update-downloaded", () => {
+    const choice = dialog.showMessageBoxSync({
+      type: "info",
+      title: "Vocaboom 更新已下载",
+      message: "新版已经准备好，要现在重启并安装吗？",
+      buttons: ["现在安装", "稍后"],
+      defaultId: 0,
+      cancelId: 1,
+    });
+    if (choice === 0) {
+      isQuitting = true;
+      autoUpdater.quitAndInstall();
+    }
+  });
+  autoUpdater.on("error", (error) => {
+    console.error("Auto updater failed", error);
+  });
+  setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 5000);
 }
 
 function registerIpcHandlers() {
@@ -86,11 +122,7 @@ function registerIpcHandlers() {
 app.whenReady().then(async () => {
   app.setAppUserModelId("com.vocaboom.desktop");
   settingsStore = new SettingsStore(path.join(app.getPath("userData"), "settings.json"));
-  localApi = new LocalApiClient({
-    isDevelopment,
-    resourcesPath: process.resourcesPath,
-    dataDirectory: path.join(app.getPath("userData"), "data"),
-  });
+  localApi = new LocalApiClient({ apiBaseUrl });
   localApi.setAuthToken(settingsStore.get("authToken", ""));
   localApi.start();
   await localApi.waitUntilReady();
@@ -99,6 +131,7 @@ app.whenReady().then(async () => {
     isDevelopment,
     desktopDirectory: __dirname,
     shouldQuit: () => isQuitting,
+    productionUrl,
   });
   windowManager.createWindows();
   dictionary = new DictionaryService();
@@ -113,6 +146,7 @@ app.whenReady().then(async () => {
 
   createTray();
   registerIpcHandlers();
+  registerAutoUpdater();
   hoverController.setEnabled(settingsStore.get("hoverEnabled", true), { persist: false });
   app.on("activate", () => windowManager.showMainWindow());
 });

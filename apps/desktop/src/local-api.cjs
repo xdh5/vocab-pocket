@@ -1,13 +1,9 @@
-const { spawn } = require("node:child_process");
 const http = require("node:http");
-const path = require("node:path");
+const https = require("node:https");
 
 class LocalApiClient {
-  constructor({ isDevelopment, resourcesPath, dataDirectory }) {
-    this.isDevelopment = isDevelopment;
-    this.resourcesPath = resourcesPath;
-    this.dataDirectory = dataDirectory;
-    this.process = null;
+  constructor({ apiBaseUrl }) {
+    this.apiBaseUrl = String(apiBaseUrl || "http://127.0.0.1:8000").replace(/\/$/, "");
     this.authToken = "";
   }
 
@@ -15,14 +11,16 @@ class LocalApiClient {
     this.authToken = String(token || "");
   }
 
-  request(method, route, body, timeoutMs = 1500) {
+  request(method, route, body, timeoutMs = 5000) {
     return new Promise((resolve, reject) => {
       const payload = body ? JSON.stringify(body) : null;
-      const request = http.request(
+      const target = new URL(route, this.apiBaseUrl);
+      const transport = target.protocol === "https:" ? https : http;
+      const request = transport.request(
         {
-          hostname: "127.0.0.1",
-          port: 8000,
-          path: route,
+          hostname: target.hostname,
+          port: target.port || (target.protocol === "https:" ? 443 : 80),
+          path: `${target.pathname}${target.search}`,
           method,
           headers: {
             ...(payload
@@ -48,26 +46,20 @@ class LocalApiClient {
         },
       );
       request.on("error", reject);
-      request.setTimeout(timeoutMs, () => request.destroy(new Error("Local API timed out")));
+      request.setTimeout(timeoutMs, () => request.destroy(new Error("API request timed out")));
       if (payload) request.write(payload);
       request.end();
     });
   }
 
   start() {
-    if (this.isDevelopment) return;
-    const executable = path.join(this.resourcesPath, "api", "vocabulary-api.exe");
-    this.process = spawn(executable, [], {
-      windowsHide: true,
-      env: { ...process.env, VOCABULARY_DATA_DIR: this.dataDirectory },
-    });
-    this.process.on("error", (error) => console.error("Could not start local API", error));
+    // 生产版桌面端只作为网页套壳和 Windows 取词能力，不再启动本地 Python 后端。
   }
 
   async waitUntilReady(attempts = 30) {
     while (attempts > 0) {
       try {
-        const result = await this.request("GET", "/health");
+        const result = await this.request("GET", "/health", null, 3000);
         if (result.status === 200) return true;
       } catch {}
       attempts -= 1;
@@ -76,9 +68,7 @@ class LocalApiClient {
     return false;
   }
 
-  stop() {
-    if (this.process && !this.process.killed) this.process.kill();
-  }
+  stop() {}
 }
 
 module.exports = { LocalApiClient };

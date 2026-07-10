@@ -1,0 +1,56 @@
+name: Build and publish Windows installer
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:win -- --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vocaboom-windows-installer
+          path: |
+            release/*.exe
+            release/*.blockmap
+            release/latest.yml
+          if-no-files-found: error
+          retention-days: 14
+
+  publish-updates:
+    needs: build-windows
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: vocaboom-windows-installer
+          path: release
+
+      - name: Configure SSH
+        env:
+          DEPLOY_HOST: ${{ secrets.ALIYUN_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -T 10 -H "$DEPLOY_HOST" > ~/.ssh/known_hosts
+
+      - name: Upload installer update files
+        env:
+          DEPLOY_HOST: ${{ secrets.ALIYUN_HOST }}
+          DEPLOY_USER: ${{ secrets.ALIYUN_USER }}
+        run: |
+          ssh "$DEPLOY_USER@$DEPLOY_HOST" 'mkdir -p /root/frontend/dist/vocaboom/desktop-updates'
+          rsync -az --delete release/ "$DEPLOY_USER@$DEPLOY_HOST:/root/frontend/dist/vocaboom/desktop-updates/"

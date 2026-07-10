@@ -2,10 +2,11 @@ const { BrowserWindow, screen, shell } = require("electron");
 const path = require("node:path");
 
 class WindowManager {
-  constructor({ isDevelopment, desktopDirectory, shouldQuit }) {
+  constructor({ isDevelopment, desktopDirectory, shouldQuit, productionUrl }) {
     this.isDevelopment = isDevelopment;
     this.desktopDirectory = desktopDirectory;
     this.shouldQuit = shouldQuit;
+    this.productionUrl = productionUrl;
     this.mainWindow = null;
     this.hoverWindow = null;
     this.hoverShowing = false;
@@ -30,14 +31,14 @@ class WindowManager {
       height: 720,
       minWidth: 760,
       minHeight: 560,
-      backgroundColor: "#f6f2e9",
+      backgroundColor: "#eff6ff",
       icon: path.join(this.desktopDirectory, "assets", "app-icon.png"),
       title: "Vocaboom",
       autoHideMenuBar: true,
       webPreferences: this.#webPreferences(),
     });
     if (this.isDevelopment) this.mainWindow.loadURL("http://localhost:5173");
-    else this.mainWindow.loadFile(path.join(this.desktopDirectory, "../web/dist/index.html"));
+    else this.mainWindow.loadURL(this.productionUrl);
     this.mainWindow.webContents.setWindowOpenHandler(({ url }) => {
       shell.openExternal(url);
       return { action: "deny" };
@@ -57,7 +58,7 @@ class WindowManager {
       show: false,
       frame: false,
       resizable: false,
-      backgroundColor: "#fffdf7",
+      backgroundColor: "#ffffff",
       alwaysOnTop: true,
       skipTaskbar: true,
       hasShadow: true,

@@ -11,7 +11,7 @@ cd "$APP_DIR"
 docker compose -f deploy/compose.prod.yml up -d --build --remove-orphans
 
 install -d "$WEB_ROOT"
-rsync -a --delete apps/web/dist/ "$WEB_ROOT/"
+rsync -a --delete --exclude desktop-updates/ apps/web/dist/ "$WEB_ROOT/"
 
 cp "$CADDY_CONFIG" "$CADDY_BACKUP"
 awk '
