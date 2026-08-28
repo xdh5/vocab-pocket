@@ -76,6 +76,9 @@ body {
   margin-top: 24px;
   text-align: left;
 }
+.login-mark {
+  object-fit: cover;
+}
 .login-card label {
   color: #716b62;
   display: grid;

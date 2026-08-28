@@ -27,8 +27,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   return (
     <main className="login-page">
       <section className="login-card">
-        <div className="login-mark">V</div>
-        <p>VOCABOOM</p>
+        <img className="login-mark" src="/app-icon.png" alt="项目图标" />
         <h1>欢迎回来</h1>
         <span>登录后，电脑收词和手机复习会进入同一个词库。</span>
         <form onSubmit={submit}>
