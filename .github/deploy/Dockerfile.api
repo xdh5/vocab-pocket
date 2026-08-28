@@ -13,6 +13,7 @@ RUN pip install --requirement /tmp/requirements.txt
 COPY apps/api/alembic.ini ./alembic.ini
 COPY apps/api/alembic ./alembic
 COPY apps/api/app ./app
+COPY prompt ./prompt
 
 RUN mkdir -p /data
 

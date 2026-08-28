@@ -5,7 +5,11 @@ from pathlib import Path
 from app.core.config import Settings
 from app.schemas.word import GeneratedWordCard
 
-PROMPT_FILE = Path(__file__).resolve().parents[4] / "prompt" / "prompt.md"
+_prompt_candidates = (
+    Path(__file__).resolve().parents[4] / "prompt" / "prompt.md",
+    Path(__file__).resolve().parents[2] / "prompt" / "prompt.md",
+)
+PROMPT_FILE = next(path for path in _prompt_candidates if path.exists())
 WORD_CARD_PROMPT = PROMPT_FILE.read_text(encoding="utf-8")
 
 
