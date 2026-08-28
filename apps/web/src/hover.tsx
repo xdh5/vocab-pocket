@@ -114,10 +114,10 @@ function HoverCard() {
         {status === "idle" ? (
           <div className="hover-actions">
             <button type="button" className="speaking" onClick={() => addWord("listening_speaking")}>
-              ＋仅听说
+              ＋听说
             </button>
             <button type="button" onClick={() => addWord("reading")}>
-              ＋读（含听说）
+              ＋读
             </button>
           </div>
         ) : (

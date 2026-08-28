@@ -46,8 +46,8 @@ export function AddWordForm({ onAdd }: AddWordFormProps) {
         <label className="category-field">
           加入方式
           <select value={mode} onChange={(event) => setMode(event.target.value as LearningMode)}>
-            <option value="reading">读（同时加入听说）</option>
-            <option value="listening_speaking">仅听说</option>
+            <option value="listening_speaking">听说</option>
+            <option value="reading">读</option>
           </select>
         </label>
         <button type="submit" disabled={saving || !term.trim()}>

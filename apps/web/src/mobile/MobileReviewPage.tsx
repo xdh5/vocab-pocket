@@ -28,7 +28,7 @@ function loadDailyProgress(): DailyProgress {
 }
 
 function matchesFilter(word: Word, filter: ReviewFilter) {
-  if (filter === "listening_speaking") return word.has_listening_speaking && !word.has_reading;
+  if (filter === "listening_speaking") return word.has_listening_speaking;
   if (filter === "reading") return word.has_reading;
   return true;
 }
@@ -63,7 +63,11 @@ export function MobileReviewPage({
   const [revealed, setRevealed] = useState(false);
   const filteredQueue = useMemo(() => queue.filter((word) => matchesFilter(word, filter)), [queue, filter]);
   const currentWord = filteredQueue[0] ?? null;
-  const isListeningOnly = Boolean(currentWord?.has_listening_speaking && !currentWord.has_reading);
+  const isListeningOnly = Boolean(
+    currentWord &&
+      (filter === "listening_speaking" ||
+        (filter === "all" && currentWord.has_listening_speaking && !currentWord.has_reading)),
+  );
   const exampleToPlay = currentWord && isListeningOnly && !revealed ? currentWord.example_sentence : "";
   const pronunciation = usePronunciationAssessment(currentWord?.term ?? "");
   const readyWords = useMemo(() => words.filter((word) => word.enrichment_status === "ready"), [words]);
@@ -465,8 +469,8 @@ export function MobileReviewPage({
       <nav className="review-filters" aria-label="复习类型">
         {[
           ["all", "全部"],
-          ["listening_speaking", "仅听说"],
-          ["reading", "阅读"],
+          ["listening_speaking", "听说"],
+          ["reading", "读"],
         ].map(([value, label]) => (
           <button
             type="button"

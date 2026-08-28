@@ -196,9 +196,10 @@ class WordService:
 
     @staticmethod
     def _apply_learning_mode(word: Word, mode: LearningMode) -> None:
-        word.has_listening_speaking = True
         if mode == LearningMode.READING:
             word.has_reading = True
+        elif mode == LearningMode.LISTENING_SPEAKING:
+            word.has_listening_speaking = True
 
     def delete_word(self, word_id: int) -> bool:
         word = self.repository.get_by_id(word_id)
