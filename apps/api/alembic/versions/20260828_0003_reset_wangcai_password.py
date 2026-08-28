@@ -20,8 +20,7 @@ def upgrade() -> None:
         sa.text(
             "INSERT INTO users (username, password_hash, nickname, avatar_url) "
             "VALUES ('wangcai', :password_hash, '五岛悠诚', '/wangcai-avatar.png')"
-        ),
-        {"password_hash": PASSWORD_HASH},
+        ).bindparams(password_hash=PASSWORD_HASH)
     )
 
 
