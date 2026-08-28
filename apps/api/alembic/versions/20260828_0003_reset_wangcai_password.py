@@ -14,6 +14,7 @@ PASSWORD_HASH = "pbkdf2_sha256$600000$ueAWjX7RgFdIJcL7ttVIWw==$5BgIwFbtTxHJxe3Au
 
 
 def upgrade() -> None:
+    op.execute(sa.text("DELETE FROM auth_sessions"))
     op.execute(sa.text("DELETE FROM users"))
     op.execute(
         sa.text(

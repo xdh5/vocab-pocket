@@ -16,6 +16,7 @@ PASSWORD_HASH = "pbkdf2_sha256$600000$ueAWjX7RgFdIJcL7ttVIWw==$5BgIwFbtTxHJxe3Au
 def upgrade() -> None:
     op.add_column("users", sa.Column("nickname", sa.String(length=80), nullable=False, server_default=""))
     op.add_column("users", sa.Column("avatar_url", sa.String(length=500), nullable=False, server_default=""))
+    op.execute(sa.text("DELETE FROM auth_sessions"))
     op.execute(sa.text("DELETE FROM users"))
     op.execute(
         sa.text(
