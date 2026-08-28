@@ -107,4 +107,5 @@ jobs:
             'sh ~/vocaboom/.github/deploy/deploy-on-server.sh'
 
       - name: Verify production
-        run: curl --fail --show-error --silent --retry 12 --retry-delay 5 https://vocaboom.cyberlab.bond/health
+        run: curl --fail --show-error --silent --retry 12 --retry-delay 5 \
+          --header 'Host: vocaboom.cyberlab.bond' http://47.116.4.25/health

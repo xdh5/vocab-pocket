@@ -2,7 +2,7 @@
 set -eu
 
 APP_DIR="${HOME}/vocaboom"
-WEB_ROOT="/root/frontend/dist/vocaboom"
+WEB_ROOT="/var/www/vocaboom"
 NGINX_CONFIG="/etc/nginx/sites-available/vocaboom.conf"
 NGINX_ENABLED="/etc/nginx/sites-enabled/vocaboom.conf"
 
