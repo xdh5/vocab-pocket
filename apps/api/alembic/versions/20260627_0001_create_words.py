@@ -43,13 +43,6 @@ def upgrade() -> None:
                     "u5ItVQNw_gqZu0Gd55bj4V59rb5Xu3Sszh-kZJnmQXE="
                 ),
             },
-            {
-                "username": "admin",
-                "password_hash": (
-                    "pbkdf2_sha256$600000$cHaOX6ZK7QkCK_Z_4Xh0SA==$"
-                    "iV2U0ggn41-ak2bRl1gjaf5fqfw3ONFxWgBzLgAgQmo="
-                ),
-            },
         ],
     )
     op.create_table(
