@@ -5,9 +5,8 @@ from pathlib import Path
 from app.core.config import Settings
 from app.schemas.word import GeneratedWordCard
 
-PROMPT_DIR = Path(__file__).resolve().parents[4] / "prompt"
-WORD_CARD_SYSTEM_PROMPT = (PROMPT_DIR / "word_card_system.txt").read_text(encoding="utf-8")
-WORD_CARD_USER_PROMPT = (PROMPT_DIR / "word_card_user.txt").read_text(encoding="utf-8")
+PROMPT_FILE = Path(__file__).resolve().parents[4] / "prompt" / "prompt.md"
+WORD_CARD_PROMPT = PROMPT_FILE.read_text(encoding="utf-8")
 
 
 class WordCardGenerationError(RuntimeError):
@@ -39,11 +38,11 @@ class DoubaoWordCardGenerator:
                     "messages": [
                         {
                             "role": "system",
-                            "content": WORD_CARD_SYSTEM_PROMPT,
+                            "content": WORD_CARD_PROMPT,
                         },
                         {
                             "role": "user",
-                            "content": WORD_CARD_USER_PROMPT.format(term=term),
+                            "content": f"为英语单词 {term!r} 生成词卡。",
                         },
                     ],
                     "response_format": {"type": "json_object"},
