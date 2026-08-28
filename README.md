@@ -112,10 +112,10 @@ VOCABULARY_DOUBAO_IMAGE_MODEL=doubao-seedream-5-0-260128
 
 生产地址为 `https://vocaboom.cyberlab.bond`。部署使用一台阿里云 ECS：
 
-- 复用 ECS 上已有的 Caddy 网关，提供 HTTPS、静态网页与 `/api`、`/media` 反向代理。
+- 复用 ECS 上已有的 Nginx 网关，提供静态网页与 `/api`、`/media` 反向代理。
 - FastAPI 运行在独立容器中，不直接暴露公网端口。
 - SQLite 数据库和词义图片保存在 Docker 持久化卷 `vocaboom_data`。
-- 部署脚本会备份、验证并热加载 Caddy 配置；配置无效时自动恢复，不影响现有站点。
+- 部署脚本会写入独立的 Vocaboom Nginx 站点配置，验证后热加载，不影响现有站点。
 
 服务器需要安装 Docker Engine 和 Docker Compose 插件，并在安全组中开放 `80/TCP`、`443/TCP` 和 `443/UDP`。SSH 端口只应对可信 IP 开放。云解析 DNS 为 `cyberlab.bond` 添加记录：
 
@@ -125,7 +125,7 @@ VOCABULARY_DOUBAO_IMAGE_MODEL=doubao-seedream-5-0-260128
 记录值：ECS 公网 IPv4
 ```
 
-中国内地 ECS 对外提供网站前需要为域名完成 ICP 备案。DNS 指向服务器并开放 80/443 后，Caddy 会自动申请证书并将 HTTP 跳转到 HTTPS。
+中国内地 ECS 对外提供网站前需要为域名完成 ICP 备案。DNS 指向服务器并开放 80 端口后即可访问；如需 HTTPS，可在 Nginx 前增加证书配置。
 
 GitHub 仓库创建名为 `production` 的 Environment，并配置以下 Secrets：
 
@@ -138,7 +138,7 @@ ARK_API_KEY             火山方舟 API Key
 
 CI 会在部署时根据 `ALIYUN_HOST` 自动读取 ECS 的 SSH 主机公钥记录。
 
-推送或手动运行 `master` 分支的 GitHub Actions 后，CI 会依次执行静态检查、类型检查、Web 构建、API 镜像构建、Compose/Caddy 配置校验，随后将发布内容同步到 `~/vocaboom` 并启动生产容器。部署完成后通过 `/health` 验证服务。
+推送或手动运行 `master` 分支的 GitHub Actions 后，CI 会依次执行静态检查、类型检查、Web 构建、API 镜像构建和 Compose 配置校验，随后将发布内容同步到 `~/vocaboom`、启动生产容器并更新 Nginx 配置。部署完成后通过 `/health` 验证服务。
 
 备份数据库和图片：
 
