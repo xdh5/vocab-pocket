@@ -11,6 +11,8 @@ class UserRead(BaseModel):
 
     id: int
     username: str
+    nickname: str
+    avatar_url: str
     daily_review_target: int
     daily_new_target: int
 

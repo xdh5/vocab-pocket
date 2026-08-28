@@ -12,6 +12,8 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(80, collation="NOCASE"), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(Text)
+    nickname: Mapped[str] = mapped_column(String(80), default="")
+    avatar_url: Mapped[str] = mapped_column(String(500), default="")
     daily_review_target: Mapped[int] = mapped_column(Integer, default=10)
     daily_new_target: Mapped[int] = mapped_column(Integer, default=5)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
