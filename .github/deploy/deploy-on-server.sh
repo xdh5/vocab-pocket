@@ -2,10 +2,9 @@
 set -eu
 
 APP_DIR="${HOME}/vocaboom"
-CADDY_CONFIG="/root/Caddyfile"
-CADDY_BACKUP="/root/Caddyfile.vocaboom-backup"
-CADDY_CONTAINER="caddy-gateway"
 WEB_ROOT="/root/frontend/dist/vocaboom"
+NGINX_CONFIG="/etc/nginx/sites-available/vocaboom.conf"
+NGINX_ENABLED="/etc/nginx/sites-enabled/vocaboom.conf"
 
 cd "$APP_DIR"
 docker compose -f .github/deploy/compose.prod.yml up -d --build --remove-orphans
@@ -13,27 +12,8 @@ docker compose -f .github/deploy/compose.prod.yml up -d --build --remove-orphans
 install -d "$WEB_ROOT"
 rsync -a --delete --exclude desktop-updates/ apps/web/dist/ "$WEB_ROOT/"
 
-cp "$CADDY_CONFIG" "$CADDY_BACKUP"
-awk '
-  $0 == "# BEGIN VOCABOOM" { skipping = 1; next }
-  $0 == "# END VOCABOOM" { skipping = 0; next }
-  !skipping { print }
-' "$CADDY_CONFIG" > "${CADDY_CONFIG}.tmp"
-
-{
-  printf '\n# BEGIN VOCABOOM\n'
-  cat .github/deploy/Caddyfile
-  printf '# END VOCABOOM\n'
-} >> "${CADDY_CONFIG}.tmp"
-cat "${CADDY_CONFIG}.tmp" > "$CADDY_CONFIG"
-rm -f "${CADDY_CONFIG}.tmp"
-
-if ! docker exec "$CADDY_CONTAINER" caddy validate --config /etc/caddy/Caddyfile; then
-  cat "$CADDY_BACKUP" > "$CADDY_CONFIG"
-  rm -f "$CADDY_BACKUP"
-  exit 1
-fi
-
-docker exec "$CADDY_CONTAINER" caddy reload --config /etc/caddy/Caddyfile
-rm -f "$CADDY_BACKUP"
+install -m 644 .github/deploy/nginx-vocaboom.conf "$NGINX_CONFIG"
+ln -sfn "$NGINX_CONFIG" "$NGINX_ENABLED"
+nginx -t
+systemctl reload nginx
 docker image prune -f

@@ -49,13 +49,6 @@ jobs:
           docker compose -f .github/deploy/compose.prod.yml config --quiet
       - name: Build API image
         run: docker build --file .github/deploy/Dockerfile.api .
-      - name: Validate Caddy configuration
-        run: >-
-          docker run --rm
-          --volume "$PWD/.github/deploy/Caddyfile:/etc/caddy/Caddyfile:ro"
-          caddy:2-alpine
-          caddy validate --config /etc/caddy/Caddyfile
-
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     needs:
