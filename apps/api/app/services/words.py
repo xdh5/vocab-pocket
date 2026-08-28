@@ -161,6 +161,9 @@ class WordService:
                     card.image_search_query,
                     card.image_prompt,
                 )
+                if image is None:
+                    word.image_status = ImageStatus.NOT_REQUESTED
+                    return self.repository.save(word)
                 word.image_url = image.url
                 word.image_source = image.source
                 word.image_source_url = image.source_url
