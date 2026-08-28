@@ -13,12 +13,12 @@ class WordCardGenerationError(RuntimeError):
     pass
 
 
-class DoubaoWordCardGenerator:
+class QwenWordCardGenerator:
     def __init__(self, settings: Settings):
-        self.api_key = settings.ark_api_key.strip()
-        self.base_url = settings.doubao_base_url.rstrip("/")
-        self.model = settings.doubao_text_model
-        self.timeout = settings.doubao_timeout_seconds
+        self.api_key = settings.qwen_api_key.strip()
+        self.base_url = settings.qwen_base_url.rstrip("/")
+        self.model = settings.qwen_model.strip()
+        self.timeout = settings.qwen_timeout_seconds
 
     @property
     def is_configured(self) -> bool:

@@ -2,7 +2,7 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy.orm import Session
 
-from app.integrations.doubao import DoubaoWordCardGenerator, WordCardGenerationError
+from app.integrations.doubao import QwenWordCardGenerator, WordCardGenerationError
 from app.integrations.word_images import WordImageError, WordImageService
 from app.models.word import EnrichmentStatus, ImageStatus, LearningMode, ReviewRating, Word
 from app.models.word_form import WordForm
@@ -28,7 +28,7 @@ class WordService:
         self,
         session: Session,
         user_id: int,
-        card_generator: DoubaoWordCardGenerator | None = None,
+        card_generator: QwenWordCardGenerator | None = None,
         image_service: WordImageService | None = None,
     ):
         self.repository = WordRepository(session, user_id)

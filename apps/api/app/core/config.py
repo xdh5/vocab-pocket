@@ -23,11 +23,10 @@ class Settings(BaseSettings):
     app_version: str = "0.2.0"
     data_dir: Path = Field(default_factory=_default_data_dir)
     database_url: str | None = None
-    ark_api_key: str = ""
-    doubao_base_url: str = "https://ark.cn-beijing.volces.com/api/v3"
-    doubao_text_model: str = "doubao-seed-2-0-lite-260428"
-    doubao_image_model: str = "doubao-seedream-5-0-260128"
-    doubao_timeout_seconds: float = 60.0
+    qwen_api_key: str = ""
+    qwen_base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    qwen_model: str = "qwen-plus"
+    qwen_timeout_seconds: float = 60.0
     image_timeout_seconds: float = 120.0
     cors_origins: list[str] = [
         "http://localhost:5173",

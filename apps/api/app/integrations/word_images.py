@@ -25,9 +25,6 @@ class WordImageService:
     commons_api_url = "https://commons.wikimedia.org/w/api.php"
 
     def __init__(self, settings: Settings):
-        self.api_key = settings.ark_api_key.strip()
-        self.base_url = settings.doubao_base_url.rstrip("/")
-        self.model = settings.doubao_image_model
         self.timeout = settings.image_timeout_seconds
         self.media_dir = settings.data_dir / "media"
 

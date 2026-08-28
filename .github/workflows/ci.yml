@@ -91,11 +91,12 @@ jobs:
 
       - name: Write production secrets
         env:
-          ARK_API_KEY: ${{ secrets.ARK_API_KEY }}
+          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+          QWEN_MODEL: ${{ vars.QWEN_MODEL }}
           DEPLOY_HOST: ${{ secrets.ALIYUN_HOST }}
           DEPLOY_USER: ${{ secrets.ALIYUN_USER }}
         run: |
-          printf 'VOCABULARY_ARK_API_KEY=%s\n' "$ARK_API_KEY" | \
+          printf 'VOCABULARY_QWEN_API_KEY=%s\nVOCABULARY_QWEN_MODEL=%s\n' "$QWEN_API_KEY" "${QWEN_MODEL:-qwen-plus}" | \
             ssh "$DEPLOY_USER@$DEPLOY_HOST" 'umask 077; cat > ~/vocaboom/.github/deploy/.env'
 
       - name: Start production services

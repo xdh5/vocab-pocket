@@ -1,7 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, Response, status
 
 from app.api.dependencies import AppSettings, CurrentUser, DatabaseSession
-from app.integrations.doubao import DoubaoWordCardGenerator
+from app.integrations.doubao import QwenWordCardGenerator
 from app.integrations.word_images import WordImageService
 from app.schemas.word import WordCreate, WordRead, WordReviewCreate
 from app.services.words import WordService
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/words", tags=["words"])
 
 def enrich_word_in_background(session_factory, settings: AppSettings, user_id: int, word_id: int) -> None:
     with session_factory() as session:
-        generator = DoubaoWordCardGenerator(settings)
+        generator = QwenWordCardGenerator(settings)
         image_service = WordImageService(settings)
         WordService(session, user_id, generator, image_service).enrich_word(word_id)
 
