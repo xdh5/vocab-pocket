@@ -47,7 +47,7 @@ export default function App() {
 
   return isMobileExperience ? (
     <MobileReviewPage
-      username={user.username}
+      username={user.nickname || user.username}
       dailyReviewTarget={user.daily_review_target}
       dailyNewTarget={user.daily_new_target}
       onSettingsChange={(reviewTarget, newTarget) => void updateStudySettings(reviewTarget, newTarget)}

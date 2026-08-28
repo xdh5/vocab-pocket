@@ -3,6 +3,8 @@ import { apiRequest, setAuthToken } from "./http";
 export type AuthUser = {
   id: number;
   username: string;
+  nickname: string;
+  avatar_url: string;
   daily_review_target: number;
   daily_new_target: number;
 };
