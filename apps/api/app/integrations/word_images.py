@@ -28,7 +28,9 @@ class WordImageService:
         self.timeout = settings.image_timeout_seconds
         self.media_dir = settings.data_dir / "media"
 
-    def find_or_generate(self, word_id: int, search_query: str, image_prompt: str = "") -> WordImageResult | None:
+    def find_or_generate(
+        self, word_id: int, search_query: str, image_prompt: str = ""
+    ) -> WordImageResult | None:
         self.media_dir.mkdir(parents=True, exist_ok=True)
         return self._find_commons_image(word_id, search_query)
 

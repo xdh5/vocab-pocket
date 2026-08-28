@@ -35,18 +35,18 @@ function matchesFilter(word: Word, filter: ReviewFilter) {
 
 type MobileReviewPageProps = {
   username: string;
+  avatarUrl: string;
   dailyReviewTarget: number;
   dailyNewTarget: number;
   onSettingsChange: (reviewTarget: number, newTarget: number) => void;
-  onLogout: () => void;
 };
 
 export function MobileReviewPage({
   username,
+  avatarUrl,
   dailyReviewTarget,
   dailyNewTarget,
   onSettingsChange,
-  onLogout,
 }: MobileReviewPageProps) {
   const { words, queue, loading, submitting, error, reviewed, known, submitReview, startReview } =
     useReviewQueue();
@@ -345,8 +345,8 @@ export function MobileReviewPage({
   }
 
   if (screen === "settings") {
-    function updateSettings(next: StudySettings) {
-      setStudySettings(next);
+    function updateSettings() {
+      const next = studySettings;
       onSettingsChange(next.reviewTarget, next.newTarget);
       setDaily((current) => {
         const updated = { ...current, target: next.reviewTarget + next.newTarget };
@@ -356,58 +356,37 @@ export function MobileReviewPage({
     }
     return (
       <main className="mobile-app mobile-settings">
-        <header className="mobile-header">
-          <div>
-            <p>VOCABOOM</p>
-            <h1>学习设置</h1>
-          </div>
+        <section className="profile-card">
+          <img src={avatarUrl || "/wangcai-avatar.png"} alt={`${username} 的头像`} />
           <strong>{username}</strong>
-        </header>
-        <section className="study-plan-card settings-card">
-          <h2>每日固定目标</h2>
-          <p>每天凌晨 5:00 开始新的一天。</p>
+        </section>
+        <section className="settings-card target-settings">
           <label>
-            <span>到期复习</span>
-            <select
-              value={studySettings.reviewTarget}
-              onChange={(event) =>
-                updateSettings({ ...studySettings, reviewTarget: Number(event.target.value) })
-              }
-            >
-              {[0, 5, 10, 20, 30, 50].map((value) => (
-                <option value={value} key={value}>
-                  {value} 个
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <span>新背单词</span>
-            <select
+            <span>新学</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
               value={studySettings.newTarget}
               onChange={(event) =>
-                updateSettings({ ...studySettings, newTarget: Number(event.target.value) })
+                setStudySettings({ ...studySettings, newTarget: Number(event.target.value) })
               }
-            >
-              {[0, 5, 10, 20, 30].map((value) => (
-                <option value={value} key={value}>
-                  {value} 个
-                </option>
-              ))}
-            </select>
+            />
           </label>
-        </section>
-        <section className="memory-strategy-card">
-          <span>记忆策略</span>
-          <h2>8 阶段间隔复习</h2>
-          <p>5 分钟 · 30 分钟 · 12 小时 · 1 天 · 2 天 · 4 天 · 7 天 · 15 天</p>
-          <small>达到 8 级后每 30 天维护复习；答错或重新加入会从 0 开始。</small>
-        </section>
-        <section className="account-settings">
-          <span>当前账号</span>
-          <strong>{username}</strong>
-          <button type="button" onClick={onLogout}>
-            退出登录
+          <label>
+            <span>复习</span>
+            <input
+              type="number"
+              min="0"
+              max="200"
+              value={studySettings.reviewTarget}
+              onChange={(event) =>
+                setStudySettings({ ...studySettings, reviewTarget: Number(event.target.value) })
+              }
+            />
+          </label>
+          <button type="button" onClick={updateSettings}>
+            确定
           </button>
         </section>
         <nav className="mobile-bottom-nav">

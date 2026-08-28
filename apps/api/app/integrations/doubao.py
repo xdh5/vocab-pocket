@@ -1,6 +1,7 @@
+from pathlib import Path
+
 import httpx
 from pydantic import ValidationError
-from pathlib import Path
 
 from app.core.config import Settings
 from app.schemas.word import GeneratedWordCard

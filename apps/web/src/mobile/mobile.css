@@ -842,6 +842,56 @@
   gap: 16px;
   padding-bottom: calc(82px + env(safe-area-inset-bottom));
 }
+.profile-card {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e1e8f3;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 12px 0 18px;
+  padding: 24px;
+}
+.profile-card img {
+  border-radius: 50%;
+  height: 76px;
+  object-fit: cover;
+  width: 76px;
+}
+.profile-card strong {
+  color: #113461;
+  font-size: 20px;
+}
+.target-settings {
+  display: grid;
+  gap: 14px;
+}
+.target-settings label {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 44px 1fr;
+}
+.target-settings label span {
+  color: #2d66e8;
+  font-weight: 700;
+}
+.target-settings input {
+  border: 1px solid #cfe0fb;
+  border-radius: 10px;
+  font: inherit;
+  padding: 11px 12px;
+}
+.target-settings button {
+  background: #2d66e8;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  padding: 12px;
+}
 
 .settings-card > p {
   color: #75847e;

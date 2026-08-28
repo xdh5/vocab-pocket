@@ -47,11 +47,11 @@ export default function App() {
 
   return isMobileExperience ? (
     <MobileReviewPage
-      username={user.nickname || user.username}
+      username={user.nickname}
+      avatarUrl={user.avatar_url}
       dailyReviewTarget={user.daily_review_target}
       dailyNewTarget={user.daily_new_target}
       onSettingsChange={(reviewTarget, newTarget) => void updateStudySettings(reviewTarget, newTarget)}
-      onLogout={() => void signOut()}
     />
   ) : (
     <WordBookPage username={user.username} onLogout={() => void signOut()} />
