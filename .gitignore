@@ -10,4 +10,4 @@ __pycache__/
 .venv/
 data/*.db
 .env
-deploy/.env
+.github/deploy/.env

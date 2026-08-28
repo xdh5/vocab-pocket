@@ -8,7 +8,7 @@ CADDY_CONTAINER="caddy-gateway"
 WEB_ROOT="/root/frontend/dist/vocaboom"
 
 cd "$APP_DIR"
-docker compose -f deploy/compose.prod.yml up -d --build --remove-orphans
+docker compose -f .github/deploy/compose.prod.yml up -d --build --remove-orphans
 
 install -d "$WEB_ROOT"
 rsync -a --delete --exclude desktop-updates/ apps/web/dist/ "$WEB_ROOT/"
@@ -22,7 +22,7 @@ awk '
 
 {
   printf '\n# BEGIN VOCABOOM\n'
-  cat deploy/Caddyfile
+  cat .github/deploy/Caddyfile
   printf '# END VOCABOOM\n'
 } >> "${CADDY_CONFIG}.tmp"
 cat "${CADDY_CONFIG}.tmp" > "$CADDY_CONFIG"

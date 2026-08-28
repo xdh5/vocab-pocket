@@ -3,8 +3,8 @@ name: vocaboom
 services:
   api:
     build:
-      context: ..
-      dockerfile: deploy/Dockerfile.api
+      context: ../..
+      dockerfile: .github/deploy/Dockerfile.api
     env_file:
       - .env
     environment:
