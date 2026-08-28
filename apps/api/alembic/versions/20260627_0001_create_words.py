@@ -33,18 +33,6 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_users_username"), "users", ["username"], unique=True)
-    op.bulk_insert(
-        users_table,
-        [
-            {
-                "username": "wangcai",
-                "password_hash": (
-                    "pbkdf2_sha256$600000$DKGV2gmkWm972UE8oWW6Ig==$"
-                    "u5ItVQNw_gqZu0Gd55bj4V59rb5Xu3Sszh-kZJnmQXE="
-                ),
-            },
-        ],
-    )
     op.create_table(
         "auth_sessions",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
